@@ -1,6 +1,5 @@
 import java.util.Scanner;
-import java.util.Deque;
-import java.util.ArrayDeque; // Efficient Deque implementation
+import java.util.LinkedList;
 
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
@@ -10,39 +9,37 @@ public class PalindromeCheckerApp {
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Text:");
-        String s1 = sc.nextLine();
 
-        // Normalize for comparison
-        String input = s1.toLowerCase();
+        // Define the input string
+        String input = sc.nextLine().toLowerCase();
 
-        // --- UC7: Deque-Based Optimized Palindrome Checker ---
+        // Create a LinkedList to store characters
+        LinkedList<Character> list = new LinkedList<>();
 
-        // 1. Initialize Deque
-        // ArrayDeque is faster than LinkedList for stack/queue operations
-        Deque<Character> deque = new ArrayDeque<>();
-
-        // 2. Insert characters into Deque (Front to Rear)
-        for (int i = 0; i < input.length(); i++) {
-            deque.addLast(input.charAt(i));
+        // Add each character to the linked list
+        for (char c : input.toCharArray()) {
+            list.add(c);
         }
 
-        // 3. Compare until empty or only 1 character remains
-        boolean pal = true;
-        while (deque.size() > 1) {
-            // Remove from both ends
-            char first = deque.removeFirst();
-            char last = deque.removeLast();
+        // Flag to track palindrome state
+        boolean isPalindrome = true;
+
+        // Compare until only one or zero elements remain
+        while (list.size() > 1) {
+            // Remove the first and last elements for comparison
+            char first = list.removeFirst();
+            char last = list.removeLast();
 
             if (first != last) {
-                pal = false;
+                isPalindrome = false;
                 break;
             }
         }
 
-        // 4. Display the result
-        System.out.println("\n--- UC7 Deque Analysis ---");
-        System.out.println("Input Text: " + s1);
-        System.out.println("Is it a palindrome? " + pal);
+        // Display the result
+        System.out.println("\n--- UC8 Built-in LinkedList Results ---");
+        System.out.println("Input Text: " + input);
+        System.out.println("Is it a palindrome? " + isPalindrome);
 
         sc.close();
     }
