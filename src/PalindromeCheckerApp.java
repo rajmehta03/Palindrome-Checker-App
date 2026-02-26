@@ -1,5 +1,7 @@
 import java.util.Scanner;
-import java.util.Stack; // Import Stack for UC5 logic
+import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue; // Import Queue interface
 
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
@@ -11,31 +13,38 @@ public class PalindromeCheckerApp {
         System.out.println("Enter Text:");
         String s1 = sc.nextLine();
 
-        // --- UC5: Stack Based Palindrome Check ---
+        // Normalize input for comparison (lowercase)
+        String input = s1.toLowerCase();
 
-        // 1. Initialize a Stack of Characters
-        // Using the Java Stack class: https://docs.oracle.com
+        // --- UC6: Queue + Stack Based Palindrome Check ---
+
+        // 1. Initialize Data Structures
         Stack<Character> stack = new Stack<>();
+        Queue<Character> queue = new LinkedList<>(); // Queue is an interface; LinkedList is a common implementation
 
-        // 2. Push Operation: Insert all characters into the stack
-        // This places the last character of the string at the top of the stack.
-        for (int i = 0; i < s1.length(); i++) {
-            stack.push(s1.charAt(i));
+        // 2. Enqueue & Push Operations
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            stack.push(c);    // LIFO
+            queue.add(c);     // FIFO (Enqueue)
         }
 
-        // 3. Pop Operation: Build reversed string by removing from stack
-        // Due to LIFO (Last In First Out), popping creates a reversed version of s1.
-        String reversed = "";
+        // 3. Logical Comparison
+        boolean pal = true;
         while (!stack.isEmpty()) {
-            reversed += stack.pop();
+            // Pop (Last character) vs Dequeue (First character)
+            char fromStack = stack.pop();
+            char fromQueue = queue.remove(); // Dequeue operation
+
+            if (fromStack != fromQueue) {
+                pal = false;
+                break;
+            }
         }
 
-        // 4. Validation: Compare original and reversed
-        boolean pal = s1.equalsIgnoreCase(reversed);
-
-        // 5. Display the result
+        // 4. Display the result
+        System.out.println("\n--- UC6 Queue + Stack Analysis ---");
         System.out.println("Input Text: " + s1);
-        System.out.println("Reversed via Stack: " + reversed);
         System.out.println("Is it a palindrome? " + pal);
 
         sc.close();
