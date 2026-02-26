@@ -1,7 +1,6 @@
 import java.util.Scanner;
-import java.util.Stack;
-import java.util.LinkedList;
-import java.util.Queue; // Import Queue interface
+import java.util.Deque;
+import java.util.ArrayDeque; // Efficient Deque implementation
 
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
@@ -13,37 +12,35 @@ public class PalindromeCheckerApp {
         System.out.println("Enter Text:");
         String s1 = sc.nextLine();
 
-        // Normalize input for comparison (lowercase)
+        // Normalize for comparison
         String input = s1.toLowerCase();
 
-        // --- UC6: Queue + Stack Based Palindrome Check ---
+        // --- UC7: Deque-Based Optimized Palindrome Checker ---
 
-        // 1. Initialize Data Structures
-        Stack<Character> stack = new Stack<>();
-        Queue<Character> queue = new LinkedList<>(); // Queue is an interface; LinkedList is a common implementation
+        // 1. Initialize Deque
+        // ArrayDeque is faster than LinkedList for stack/queue operations
+        Deque<Character> deque = new ArrayDeque<>();
 
-        // 2. Enqueue & Push Operations
+        // 2. Insert characters into Deque (Front to Rear)
         for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
-            stack.push(c);    // LIFO
-            queue.add(c);     // FIFO (Enqueue)
+            deque.addLast(input.charAt(i));
         }
 
-        // 3. Logical Comparison
+        // 3. Compare until empty or only 1 character remains
         boolean pal = true;
-        while (!stack.isEmpty()) {
-            // Pop (Last character) vs Dequeue (First character)
-            char fromStack = stack.pop();
-            char fromQueue = queue.remove(); // Dequeue operation
+        while (deque.size() > 1) {
+            // Remove from both ends
+            char first = deque.removeFirst();
+            char last = deque.removeLast();
 
-            if (fromStack != fromQueue) {
+            if (first != last) {
                 pal = false;
                 break;
             }
         }
 
         // 4. Display the result
-        System.out.println("\n--- UC6 Queue + Stack Analysis ---");
+        System.out.println("\n--- UC7 Deque Analysis ---");
         System.out.println("Input Text: " + s1);
         System.out.println("Is it a palindrome? " + pal);
 
